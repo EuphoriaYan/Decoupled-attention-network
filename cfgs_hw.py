@@ -18,7 +18,7 @@ dataset_cfgs = {
         'img_list': 'data/IAM/train_list.txt',
         'img_height': 192,
         'img_width': 2048,
-        'augment': True, # with the data augmentation toolkit
+        'augment': True,  # with the data augmentation toolkit
     },
     'dataloader_train': {
         'batch_size': 24,
@@ -45,19 +45,19 @@ dataset_cfgs = {
 net_cfgs = {
     'FE': Feature_Extractor,
     'FE_args': {
-        'strides': [(2,2), (2,2), (2,1), (2,2), (2,2), (2,1)],
-        'compress_layer' : True, 
-        'input_shape': [1, 192, 2048], # C x H x W
+        'strides': [(2, 2), (2, 2), (2, 1), (2, 2), (2, 2), (2, 1)],
+        'compress_layer': True,
+        'input_shape': [1, 192, 2048],  # C x H x W
     },
     'CAM': CAM_transposed,
     'CAM_args': {
-        'maxT': 150, 
-        'depth': 14, 
+        'maxT': 150,
+        'depth': 14,
         'num_channels': 128,
     },
     'DTD': DTD,
     'DTD_args': {
-        'nclass': 80, # extra 2 classes for Unkonwn and End-token
+        'nclass': 80,  # extra 2 classes for Unkonwn and End-token
         'nchannel': 256,
         'dropout': 0.7,
     },
@@ -74,7 +74,7 @@ net_cfgs = {
 optimizer_cfgs = {
     # optim for FE
     'optimizer_0': optim.SGD,
-    'optimizer_0_args':{
+    'optimizer_0_args': {
         'lr': 0.1,
         'momentum': 0.9,
     },
@@ -87,7 +87,7 @@ optimizer_cfgs = {
 
     # optim for CAM
     'optimizer_1': optim.SGD,
-    'optimizer_1_args':{
+    'optimizer_1_args': {
         'lr': 0.1,
         'momentum': 0.9,
     },
@@ -99,7 +99,7 @@ optimizer_cfgs = {
 
     # optim for DTD
     'optimizer_2': optim.SGD,
-    'optimizer_2_args':{
+    'optimizer_2_args': {
         'lr': 0.1,
         'momentum': 0.9,
     },
@@ -117,6 +117,7 @@ saving_cfgs = {
     'saving_path': 'models/hw/exp1_',
 }
 
+
 def mkdir(path_):
     paths = path_.split('/')
     command_str = 'mkdir '
@@ -125,9 +126,11 @@ def mkdir(path_):
     command_str = command_str[0:-1]
     os.system(command_str)
 
+
 def showcfgs(s):
     for key in s.keys():
-        print(key , s[key])
+        print(key, s[key])
     print('')
+
 
 mkdir(saving_cfgs['saving_path'])

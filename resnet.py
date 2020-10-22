@@ -3,8 +3,11 @@ import math
 import torch.utils.model_zoo as model_zoo
 import torch.nn.functional as F
 
-def conv1x1(in_planes,out_planes,stride=1):
-    return nn.Conv2d(in_planes,out_planes,kernel_size =1,stride =stride,bias=False)
+
+def conv1x1(in_planes, out_planes, stride=1):
+    return nn.Conv2d(in_planes, out_planes, kernel_size=1, stride=stride, bias=False)
+
+
 def conv3x3(in_planes, out_planes, stride=1):
     "3x3 convolution with padding"
     return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
@@ -42,6 +45,7 @@ class BasicBlock(nn.Module):
 
         return out
 
+
 class ResNet(nn.Module):
 
     def __init__(self, block, layers, strides, compress_layer=True):
@@ -52,19 +56,19 @@ class ResNet(nn.Module):
         self.bn1 = nn.BatchNorm2d(32)
         self.relu = nn.ReLU(inplace=True)
 
-        self.layer1 = self._make_layer(block, 32, layers[0],stride=strides[1])
+        self.layer1 = self._make_layer(block, 32, layers[0], stride=strides[1])
         self.layer2 = self._make_layer(block, 64, layers[1], stride=strides[2])
         self.layer3 = self._make_layer(block, 128, layers[2], stride=strides[3])
-        self.layer4 = self._make_layer(block, 256, layers[3], stride=strides[4])        
+        self.layer4 = self._make_layer(block, 256, layers[3], stride=strides[4])
         self.layer5 = self._make_layer(block, 512, layers[4], stride=strides[5])
 
-        self.compress_layer = compress_layer        
+        self.compress_layer = compress_layer
         if compress_layer:
             # for handwritten
             self.layer6 = nn.Sequential(
                 nn.Conv2d(512, 256, kernel_size=(3, 1), padding=(0, 0), stride=(1, 1)),
                 nn.BatchNorm2d(256),
-                nn.ReLU(inplace = True))
+                nn.ReLU(inplace=True))
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -91,7 +95,7 @@ class ResNet(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def forward(self, x, multiscale = False):
+    def forward(self, x, multiscale=False):
         out_features = []
         x = self.conv1(x)
         x = self.bn1(x)
@@ -123,6 +127,7 @@ class ResNet(nn.Module):
             x = self.layer6(x)
             out_features.append(x)
         return out_features
+
 
 def resnet45(strides, compress_layer):
     model = ResNet(BasicBlock, [3, 4, 6, 6, 3], strides, compress_layer)
