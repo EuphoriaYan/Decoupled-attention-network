@@ -168,8 +168,8 @@ if __name__ == '__main__':
             label_flatten, length = flatten_label(target)
             target, label_flatten = target.cuda(), label_flatten.cuda()
             # net forward
-            features = model[0](data)
-            A = model[1](features)
+            features = model[0](data) # 32*64*16, 128*32*8, 512*32*8
+            A = model[1](features) # 25*32*8
             output, attention_maps = model[2](features[-1], A, target, length)
             # computing accuracy and loss
             train_acc_counter.add_iter(output, length.long(), length, label)

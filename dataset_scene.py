@@ -100,7 +100,7 @@ class lmdbDataset(Dataset):
                 print('Corrupted image for %d' % index)
                 return self[index + 1]
             label_key = 'label-%09d' % index
-            label = str(txn.get(label_key.encode()))
+            label = txn.get(label_key.encode()).decode('utf-8')
             if len(label) > 32 and self.global_state == 'Train':
                 print('sample too long')
                 return self[index + 1]

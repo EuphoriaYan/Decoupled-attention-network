@@ -8,7 +8,7 @@ from DAN import *
 
 global_cfgs = {
     'state': 'Train',
-    'epoch': 10,
+    'epoch': 30,
     'show_interval': 50,
     'test_interval': 1000
 }
@@ -59,7 +59,7 @@ net_cfgs = {
     },
     'CAM': CAM,
     'CAM_args': {
-        'maxT': 25,
+        'maxT': 35,
         'depth': 8,
         'num_channels': 64,
     },

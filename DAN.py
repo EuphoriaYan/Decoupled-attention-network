@@ -41,8 +41,8 @@ class CAM(nn.Module):
         # cascade multiscale features
         fpn = []
         for i in range(1, len(scales)):
-            assert not (scales[i - 1][1] / scales[i][1]) % 1, 'layers scale error, from {} to {}'.format(i - 1, i)
-            assert not (scales[i - 1][2] / scales[i][2]) % 1, 'layers scale error, from {} to {}'.format(i - 1, i)
+            assert not (scales[i - 1][1] // scales[i][1]) % 1, 'layers scale error, from {} to {}'.format(i - 1, i)
+            assert not (scales[i - 1][2] // scales[i][2]) % 1, 'layers scale error, from {} to {}'.format(i - 1, i)
             ksize = [3, 3, 5]  # if downsampling ratio >= 3, the kernel size is 5, else 3
             r_h, r_w = int(scales[i - 1][1] / scales[i][1]), int(scales[i - 1][2] / scales[i][2])
             ksize_h = 1 if scales[i - 1][1] == 1 else ksize[r_h - 1]
