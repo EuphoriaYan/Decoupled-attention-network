@@ -30,7 +30,9 @@ class lmdbDataset(Dataset):
                 readonly=True,
                 lock=False,
                 readahead=False,
-                meminit=False)
+                meminit=False,
+                subdir=True
+            )
             if not env:
                 print('cannot creat lmdb from %s' % (roots))
                 sys.exit(0)
