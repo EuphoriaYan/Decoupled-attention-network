@@ -18,7 +18,7 @@ def display_cfgs(models):
     print('global_cfgs')
     cfgs.showcfgs(cfgs.global_cfgs)
     print('dataset_cfgs')
-    cfgs.showcfgs(cfgs.dataset_cfgs)
+    # cfgs.showcfgs(cfgs.dataset_cfgs)
     print('net_cfgs')
     cfgs.showcfgs(cfgs.net_cfgs)
     print('optimizer_cfgs')
