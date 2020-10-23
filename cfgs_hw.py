@@ -42,12 +42,21 @@ dataset_cfgs = {
     'dict_dir': 'dict/dic_79.txt'
 }
 
-net_cfgs = {
-    'FE': Feature_Extractor,
+
+'''
     'FE_args': {
         'strides': [(2, 2), (2, 2), (2, 1), (2, 2), (2, 2), (2, 1)],
         'compress_layer': True,
         'input_shape': [1, 192, 2048],  # C x H x W
+    },
+'''
+
+net_cfgs = {
+    'FE': Feature_Extractor,
+    'FE_args': {
+        'strides': [(2, 2), (2, 2), (1, 2), (2, 2), (2, 2), (1, 2)],
+        'compress_layer': True,
+        'input_shape': [1, 2048, 192],  # C x H x W
     },
     'CAM': CAM_transposed,
     'CAM_args': {
@@ -62,13 +71,13 @@ net_cfgs = {
         'dropout': 0.7,
     },
 
-    'init_state_dict_fe': 'models/hw/exp1_E99_I2000-2295_M0.pth',
+    # 'init_state_dict_fe': 'models/hw/exp1_E99_I2000-2295_M0.pth',
     'init_state_dict_cam': 'models/hw/exp1_E99_I2000-2295_M1.pth',
-    'init_state_dict_dtd': 'models/hw/exp1_E99_I2000-2295_M2.pth',
+    # 'init_state_dict_dtd': 'models/hw/exp1_E99_I2000-2295_M2.pth',
 
-    # 'init_state_dict_fe': None,
+    'init_state_dict_fe': None,
     # 'init_state_dict_cam': None,
-    # 'init_state_dict_dtd': None,
+    'init_state_dict_dtd': None,
 }
 
 optimizer_cfgs = {

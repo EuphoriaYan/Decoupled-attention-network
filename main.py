@@ -79,11 +79,11 @@ def load_network():
 
     model_dtd = cfgs.net_cfgs['DTD'](**cfgs.net_cfgs['DTD_args'])
 
-    if cfgs.net_cfgs['init_state_dict_fe'] != None:
+    if cfgs.net_cfgs['init_state_dict_fe'] is not None:
         model_fe.load_state_dict(torch.load(cfgs.net_cfgs['init_state_dict_fe']))
-    if cfgs.net_cfgs['init_state_dict_cam'] != None:
+    if cfgs.net_cfgs['init_state_dict_cam'] is not None:
         model_cam.load_state_dict(torch.load(cfgs.net_cfgs['init_state_dict_cam']))
-    if cfgs.net_cfgs['init_state_dict_dtd'] != None:
+    if cfgs.net_cfgs['init_state_dict_dtd'] is not None:
         model_dtd.load_state_dict(torch.load(cfgs.net_cfgs['init_state_dict_dtd']))
 
     model_fe.cuda()
@@ -170,7 +170,7 @@ if __name__ == '__main__':
             features = model[0](data)
             A = model[1](features)
             output, attention_maps = model[2](features[-1], A, target, length)
-            # computing accuracy and loss 
+            # computing accuracy and loss
             train_acc_counter.add_iter(output, length.long(), length, label)
             loss = criterion_CE(output, label_flatten)
             loss_counter.add_iter(loss)

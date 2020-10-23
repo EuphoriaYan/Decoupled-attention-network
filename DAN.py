@@ -122,22 +122,22 @@ class CAM_transposed(nn.Module):
         # cascade multiscale features
         fpn = []
         for i in range(1, len(scales)):
-            assert not (scales[i - 1][1] / scales[i][1]) % 1, 'layers scale error, from {} to {}'.format(i - 1, i)
-            assert not (scales[i - 1][2] / scales[i][2]) % 1, 'layers scale error, from {} to {}'.format(i - 1, i)
+            assert not (scales[i - 1][1] // scales[i][1]) % 1, 'layers scale error, from {} to {}'.format(i - 1, i)
+            assert not (scales[i - 1][2] // scales[i][2]) % 1, 'layers scale error, from {} to {}'.format(i - 1, i)
             ksize = [3, 3, 5]
-            r_h, r_w = scales[i - 1][1] / scales[i][1], scales[i - 1][2] / scales[i][2]
+            r_h, r_w = scales[i - 1][1] // scales[i][1], scales[i - 1][2] // scales[i][2]
             ksize_h = 1 if scales[i - 1][1] == 1 else ksize[r_h - 1]
             ksize_w = 1 if scales[i - 1][2] == 1 else ksize[r_w - 1]
             fpn.append(nn.Sequential(nn.Conv2d(scales[i - 1][0], scales[i][0],
                                                (ksize_h, ksize_w),
                                                (r_h, r_w),
-                                               ((ksize_h - 1) / 2, (ksize_w - 1) / 2)),
+                                               ((ksize_h - 1) // 2, (ksize_w - 1) // 2)),
                                      nn.BatchNorm2d(scales[i][0]),
                                      nn.ReLU(True)))
         fpn.append(nn.Sequential(nn.Conv2d(scales[i][0], 1,
                                            (1, ksize_w),
                                            (1, r_w),
-                                           (0, (ksize_w - 1) / 2)),
+                                           (0, (ksize_w - 1) // 2)),
                                  nn.Sigmoid()))
         self.fpn = nn.Sequential(*fpn)
         # convolutional alignment
@@ -145,7 +145,7 @@ class CAM_transposed(nn.Module):
         in_shape = scales[-1]
         deconvs = []
         ksize_h = 1 if in_shape[1] == 1 else 4
-        for i in range(1, depth / 2):
+        for i in range(1, depth // 2):
             deconvs.append(nn.Sequential(nn.ConvTranspose2d(num_channels, num_channels,
                                                             (ksize_h, 4),
                                                             (r_h, 2),
