@@ -7,7 +7,7 @@ from torchvision import transforms
 from DAN import *
 
 global_cfgs = {
-    'state': 'Test',
+    'state': 'Train',
     'epoch': 10,
     'show_interval': 50,
     'test_interval': 1000
