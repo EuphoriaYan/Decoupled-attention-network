@@ -119,17 +119,8 @@ saving_cfgs = {
     'saving_iter_interval': 20000,
     'saving_epoch_interval': 1,
 
-    'saving_path': 'models/scene/exp1_',
+    'saving_path': 'models/scene/exp1',
 }
-
-
-def mkdir(path_):
-    paths = path_.split('/')
-    command_str = 'mkdir '
-    for i in range(0, len(paths) - 1):
-        command_str = command_str + paths[i] + '/'
-    command_str = command_str[0:-1]
-    os.system(command_str)
 
 
 def showcfgs(s):
@@ -138,4 +129,4 @@ def showcfgs(s):
     print('')
 
 
-mkdir(saving_cfgs['saving_path'])
+os.makedirs(saving_cfgs['saving_path'], exist_ok=True)

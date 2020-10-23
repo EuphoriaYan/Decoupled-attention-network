@@ -24,15 +24,7 @@ class lmdbDataset(Dataset):
         self.ratio = []
         self.global_state = global_state
         for i in range(0, len(roots)):
-            env = lmdb.open(
-                roots[i],
-                max_readers=1,
-                readonly=True,
-                lock=False,
-                readahead=False,
-                meminit=False,
-                subdir=True
-            )
+            env = lmdb.open(roots[i], max_readers=32, readonly=True, lock=False, readahead=False, meminit=False)
             if not env:
                 print('cannot creat lmdb from %s' % (roots))
                 sys.exit(0)
