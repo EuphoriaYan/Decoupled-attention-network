@@ -72,11 +72,11 @@ net_cfgs = {
     },
 
     # 'init_state_dict_fe': 'models/hw/exp1_E99_I2000-2295_M0.pth',
-    'init_state_dict_cam': 'models/hw/exp1_E99_I2000-2295_M1.pth',
+    # 'init_state_dict_cam': 'models/hw/exp1_E99_I2000-2295_M1.pth',
     # 'init_state_dict_dtd': 'models/hw/exp1_E99_I2000-2295_M2.pth',
 
     'init_state_dict_fe': None,
-    # 'init_state_dict_cam': None,
+    'init_state_dict_cam': None,
     'init_state_dict_dtd': None,
 }
 
