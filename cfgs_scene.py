@@ -19,7 +19,8 @@ dataset_cfgs = {
         'roots': ['dataset/line_train/book_gen_20201021'],
         'img_height': 128,
         'img_width': 32,
-        'transform': transforms.Compose([transforms.Resize(128, 32), transforms.ToTensor()]),
+        # 'transform': transforms.Compose([transforms.Resize(128, 32), transforms.ToTensor()]),
+        'transform': transforms.Compose([transforms.ToTensor()]),
         'global_state': 'Train',
     },
     'dataloader_train': {
@@ -33,7 +34,8 @@ dataset_cfgs = {
         'roots': ['dataset/line_val'],
         'img_height': 128,
         'img_width': 32,
-        'transform': transforms.Compose([transforms.Resize(128, 32), transforms.ToTensor()]),
+        # 'transform': transforms.Compose([transforms.Resize(128, 32), transforms.ToTensor()]),
+        'transform': transforms.Compose([transforms.ToTensor()]),
         'global_state': 'Test',
     },
     'dataloader_test': {

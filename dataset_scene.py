@@ -101,7 +101,7 @@ class lmdbDataset(Dataset):
                 return self[index + 1]
             label_key = 'label-%09d' % index
             label = str(txn.get(label_key.encode()))
-            if len(label) > 24 and self.global_state == 'Train':
+            if len(label) > 32 and self.global_state == 'Train':
                 print('sample too long')
                 return self[index + 1]
             try:
