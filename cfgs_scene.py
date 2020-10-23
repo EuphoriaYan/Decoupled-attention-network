@@ -16,7 +16,7 @@ global_cfgs = {
 dataset_cfgs = {
     'dataset_train': lmdbDataset,
     'dataset_train_args': {
-        'roots': ['dataset/train/line_train/book_gen_20201021'],
+        'roots': ['dataset/line_train/book_gen_20201021'],
         'img_height': 128,
         'img_width': 32,
         'transform': transforms.Compose([transforms.Resize(128, 32), transforms.ToTensor()]),

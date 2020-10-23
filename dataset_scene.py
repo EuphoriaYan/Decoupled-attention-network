@@ -34,7 +34,7 @@ class lmdbDataset(Dataset):
             self.lengths.append(nSamples)
             self.envs.append(env)
 
-        if ratio != None:
+        if ratio is not None:
             assert len(roots) == len(ratio), 'length of ratio must equal to length of roots!'
             for i in range(0, len(roots)):
                 self.ratio.append(ratio[i] / float(sum(ratio)))
