@@ -13,9 +13,9 @@ class cha_encdec():
     def __init__(self, dict_file, case_sensitive=True):
         self.dict = []
         self.case_sensitive = case_sensitive
-        lines = open(dict_file, 'r').readlines()
+        lines = open(dict_file, 'r', encoding='utf-8').readlines()
         for line in lines:
-            self.dict.append(line.replace('\n', ''))
+            self.dict.append(line.rstrip())
 
     def encode(self, label_batch):
         max_len = max([len(s) for s in label_batch])
