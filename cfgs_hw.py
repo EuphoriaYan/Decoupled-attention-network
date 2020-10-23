@@ -16,26 +16,26 @@ dataset_cfgs = {
     'dataset_train': IAMSynthesisDataset,
     'dataset_train_args': {
         'img_list': 'data/IAM/train_list.txt',
-        'img_height': 192,
-        'img_width': 2048,
+        'img_height': 2048,
+        'img_width': 192,
         'augment': True,  # with the data augmentation toolkit
     },
     'dataloader_train': {
         'batch_size': 24,
         'shuffle': True,
-        'num_workers': 2,
+        'num_workers': 4,
     },
 
     'dataset_test': IAMDataset,
     'dataset_test_args': {
         'img_list': 'data/IAM/eval_list.txt',
-        'img_height': 192,
-        'img_width': 2048,
+        'img_height': 2048,
+        'img_width': 192,
     },
     'dataloader_test': {
-        'batch_size': 12,
+        'batch_size': 24,
         'shuffle': False,
-        'num_workers': 2,
+        'num_workers': 4,
     },
 
     'case_sensitive': True,
