@@ -24,7 +24,7 @@ dataset_cfgs = {
         'global_state': 'Train',
     },
     'dataloader_train': {
-        'batch_size': 48,
+        'batch_size': 64,
         'shuffle': True,
         'num_workers': 4,
     },
@@ -39,7 +39,7 @@ dataset_cfgs = {
         'global_state': 'Test',
     },
     'dataloader_test': {
-        'batch_size': 48,
+        'batch_size': 64,
         'shuffle': False,
         'num_workers': 4,
     },
@@ -83,44 +83,43 @@ net_cfgs = {
 
 optimizer_cfgs = {
     # optim for FE
-    'optimizer_0': optim.Adadelta,
+    'optimizer_0': optim.AdamW,
     'optimizer_0_args': {
-        'lr': 1.0,
+        'lr': 3e-4,
     },
 
     'optimizer_0_scheduler': optim.lr_scheduler.MultiStepLR,
     'optimizer_0_scheduler_args': {
         'milestones': [3, 5],
-        'gamma': 0.1,
+        'gamma': 0.7,
     },
 
     # optim for CAM
-    'optimizer_1': optim.Adadelta,
+    'optimizer_1': optim.AdamW,
     'optimizer_1_args': {
-        'lr': 1.0,
+        'lr': 3e-4,
     },
     'optimizer_1_scheduler': optim.lr_scheduler.MultiStepLR,
     'optimizer_1_scheduler_args': {
         'milestones': [3, 5],
-        'gamma': 0.1,
+        'gamma': 0.7,
     },
 
     # optim for DTD
-    'optimizer_2': optim.Adadelta,
+    'optimizer_2': optim.AdamW,
     'optimizer_2_args': {
-        'lr': 1.0,
+        'lr': 3e-4,
     },
     'optimizer_2_scheduler': optim.lr_scheduler.MultiStepLR,
     'optimizer_2_scheduler_args': {
         'milestones': [3, 5],
-        'gamma': 0.1,
+        'gamma': 0.7,
     },
 }
 
 saving_cfgs = {
-    'saving_iter_interval': 20000,
+    'saving_iter_interval': 900,
     'saving_epoch_interval': 1,
-
     'saving_path': 'models/scene/exp1',
 }
 

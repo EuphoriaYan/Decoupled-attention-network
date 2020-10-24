@@ -1,5 +1,6 @@
 # coding:utf-8
 # from __future__ import print_function
+import os
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -169,7 +170,7 @@ if __name__ == '__main__':
             target, label_flatten = target.cuda(), label_flatten.cuda()
             # net forward
             features = model[0](data) # 32*64*16, 128*32*8, 512*32*8
-            A = model[1](features) # 25*32*8
+            A = model[1](features) # 35*32*8
             output, attention_maps = model[2](features[-1], A, target, length)
             # computing accuracy and loss
             train_acc_counter.add_iter(output, length.long(), length, label)
@@ -202,6 +203,6 @@ if __name__ == '__main__':
                     batch_idx != 0:
                 for i in range(0, len(model)):
                     torch.save(model[i].state_dict(),
-                               cfgs.saving_cfgs['saving_path'] + 'E{}_I{}-{}_M{}.pth'.format(
-                                   nEpoch, batch_idx, total_iters, i))
+                               os.path.join(cfgs.saving_cfgs['saving_path'], 'E{}_I{}-{}_M{}.pth'.format(
+                                   nEpoch, batch_idx, total_iters, i)))
         Updata_Parameters(optimizer_schedulers, frozen=[])
