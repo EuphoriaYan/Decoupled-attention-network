@@ -13,9 +13,6 @@ from utils import *
 import cfgs_scene_test as cfgs
 
 
-# import cfgs_hw as cfgs
-
-
 # ------------------------
 def display_cfgs(models):
     print('global_cfgs')
@@ -52,7 +49,6 @@ def Train_or_Eval(models, state='Train'):
             model.eval()
 
 
-
 # ---------------------dataset
 def load_dataset():
     test_data_set = cfgs.dataset_cfgs['dataset_test'](**cfgs.dataset_cfgs['dataset_test_args'])
@@ -81,20 +77,6 @@ def load_network():
     model_cam.cuda()
     model_dtd.cuda()
     return (model_fe, model_cam, model_dtd)
-
-
-# ----------------------optimizer
-def generate_optimizer(models):
-    out = []
-    scheduler = []
-    for i in range(0, len(models)):
-        out.append(cfgs.optimizer_cfgs['optimizer_{}'.format(i)](
-            models[i].parameters(),
-            **cfgs.optimizer_cfgs['optimizer_{}_args'.format(i)]))
-        scheduler.append(cfgs.optimizer_cfgs['optimizer_{}_scheduler'.format(i)](
-            out[i],
-            **cfgs.optimizer_cfgs['optimizer_{}_scheduler_args'.format(i)]))
-    return tuple(out), tuple(scheduler)
 
 
 # ---------------------testing stage

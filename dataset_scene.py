@@ -125,7 +125,7 @@ class RawDataset(Dataset):
         self.rgb = rgb
         self.global_state = global_state
         with open(gt_file, 'r', encoding='utf-8') as fp:
-            self.gt_file = [s.strip().split('\n') for s in fp.readlines()]
+            self.gt_file = [s.strip().split('\t') for s in fp.readlines()]
         self.labels = []
         for path, label in self.gt_file:
             self.image_path_list.append(os.path.join(roots, path))
