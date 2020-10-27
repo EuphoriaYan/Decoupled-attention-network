@@ -119,17 +119,17 @@ class lmdbDataset(Dataset):
 
 class RawDataset(Dataset):
 
-    def __init__(self, roots=None, img_height=128, img_width=32,
+    def __init__(self, roots=None, gt_file='', img_height=128, img_width=32,
                  transform=None, maxlen=35, global_state='Test', rgb=False):
         self.image_path_list = []
         self.rgb = rgb
         self.global_state = global_state
-        for dirpath, dirnames, filenames in os.walk(roots):
-            for name in filenames:
-                _, ext = os.path.splitext(name)
-                ext = ext.lower()
-                if ext == '.jpg' or ext == '.jpeg' or ext == '.png':
-                    self.image_path_list.append(os.path.join(dirpath, name))
+        with open(gt_file, 'r', encoding='utf-8') as fp:
+            self.gt_file = [s.strip().split('\n') for s in fp.readlines()]
+        self.labels = []
+        for path, label in self.gt_file:
+            self.image_path_list.append(os.path.join(roots, path))
+            self.labels.append(label)
         self.image_path_list = natsorted(self.image_path_list)
         self.nSamples = len(self.image_path_list)
 
@@ -185,6 +185,6 @@ class RawDataset(Dataset):
         img = img[:, :, np.newaxis]
         if self.transform:
             img = self.transform(img)
-        sample = {'image': img, 'label': ''}
+        sample = {'image': img, 'label': self.labels[index]}
         return sample
 
