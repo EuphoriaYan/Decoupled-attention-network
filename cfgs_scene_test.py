@@ -16,7 +16,7 @@ global_cfgs = {
 dataset_cfgs = {
     'dataset_test': RawDataset,
     'dataset_test_args': {
-        'roots': 'dataset/line_val',
+        'roots': 'dataset/test_line_image',
         'img_height': 128,
         'img_width': 32,
         # 'transform': transforms.Compose([transforms.Resize(128, 32), transforms.ToTensor()]),
