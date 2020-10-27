@@ -14,24 +14,9 @@ global_cfgs = {
 }
 
 dataset_cfgs = {
-    'dataset_train': lmdbDataset,
-    'dataset_train_args': {
-        'roots': ['dataset/line_train/book_gen_20201021'],
-        'img_height': 128,
-        'img_width': 32,
-        # 'transform': transforms.Compose([transforms.Resize(128, 32), transforms.ToTensor()]),
-        'transform': transforms.Compose([transforms.ToTensor()]),
-        'global_state': 'Train',
-    },
-    'dataloader_train': {
-        'batch_size': 64,
-        'shuffle': True,
-        'num_workers': 4,
-    },
-
-    'dataset_test': lmdbDataset,
+    'dataset_test': RawDataset,
     'dataset_test_args': {
-        'roots': ['dataset/line_val'],
+        'roots': 'dataset/line_val',
         'img_height': 128,
         'img_width': 32,
         # 'transform': transforms.Compose([transforms.Resize(128, 32), transforms.ToTensor()]),
@@ -130,4 +115,4 @@ def showcfgs(s):
     print('')
 
 
-os.makedirs(saving_cfgs['saving_path'], exist_ok=True)
+# os.makedirs(saving_cfgs['saving_path'], exist_ok=True)

@@ -1,6 +1,7 @@
 # coding:utf-8
 import random
 import torch
+from natsort import natsorted
 from torch.utils.data import Dataset
 from torch.utils.data import sampler
 import torchvision.transforms as transforms
@@ -114,3 +115,76 @@ class lmdbDataset(Dataset):
                 img = self.transform(img)
             sample = {'image': img, 'label': label}
             return sample
+
+
+class RawDataset(Dataset):
+
+    def __init__(self, roots=None, img_height=128, img_width=32,
+                 transform=None, maxlen=35, global_state='Test', rgb=False):
+        self.image_path_list = []
+        self.rgb = rgb
+        self.global_state = global_state
+        for dirpath, dirnames, filenames in os.walk(roots):
+            for name in filenames:
+                _, ext = os.path.splitext(name)
+                ext = ext.lower()
+                if ext == '.jpg' or ext == '.jpeg' or ext == '.png':
+                    self.image_path_list.append(os.path.join(dirpath, name))
+        self.image_path_list = natsorted(self.image_path_list)
+        self.nSamples = len(self.image_path_list)
+
+        self.transform = transform
+        self.maxlen = maxlen
+        self.img_height = img_height
+        self.img_width = img_width
+        self.target_ratio = img_width / img_height
+
+    def keepratio_resize(self, img):
+        h, w = img.size
+        cur_ratio = h / w
+        mask_height = self.img_height
+        mask_width = self.img_width
+        img = np.array(img)
+        if len(img.shape) == 3:
+            img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+        if cur_ratio > self.target_ratio:
+            cur_target_height = self.img_height
+            cur_target_width = self.img_width
+        else:
+            cur_target_height = self.img_height
+            cur_target_width = int(self.img_height * cur_ratio)
+        img = cv2.resize(img, (cur_target_width, cur_target_height))
+        start_x = int((mask_height - img.shape[0]) / 2)
+        start_y = int((mask_width - img.shape[1]) / 2)
+        mask = np.zeros([mask_height, mask_width]).astype(np.uint8)
+        mask[start_x: start_x + img.shape[0], start_y: start_y + img.shape[1]] = img
+        img = mask
+        return img
+
+    def __len__(self):
+        return self.nSamples
+
+    def __getitem__(self, index):
+        try:
+            if self.rgb:
+                img = Image.open(self.image_path_list[index]).convert('RGB')  # for color image
+            else:
+                img = Image.open(self.image_path_list[index]).convert('L')
+        except IOError:
+            print(f'Corrupted image for {index}')
+            # make dummy image and dummy label for corrupted image.
+            if self.rgb:
+                img = Image.new('RGB', (self.img_width, self.img_height))
+            else:
+                img = Image.new('L', (self.img_width, self.img_height))
+        try:
+            img = self.keepratio_resize(img)
+        except:
+            print('Size error for %d' % index)
+            return self[index + 1]
+        img = img[:, :, np.newaxis]
+        if self.transform:
+            img = self.transform(img)
+        sample = {'image': img, 'label': ''}
+        return sample
+

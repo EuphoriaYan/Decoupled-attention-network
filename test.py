@@ -65,13 +65,10 @@ def Updata_Parameters(optimizers, frozen):
 
 # ---------------------dataset
 def load_dataset():
-    train_data_set = cfgs.dataset_cfgs['dataset_train'](**cfgs.dataset_cfgs['dataset_train_args'])
-    train_loader = DataLoader(train_data_set, **cfgs.dataset_cfgs['dataloader_train'])
-
     test_data_set = cfgs.dataset_cfgs['dataset_test'](**cfgs.dataset_cfgs['dataset_test_args'])
     test_loader = DataLoader(test_data_set, **cfgs.dataset_cfgs['dataloader_test'])
     # pdb.set_trace()
-    return (train_loader, test_loader)
+    return test_loader
 
 
 # ---------------------network
@@ -163,18 +160,13 @@ def infer(test_loader, model, tools):
 if __name__ == '__main__':
     # prepare nets, optimizers and data
     model = load_network()
-    display_cfgs(model)
-    optimizers, optimizer_schedulers = generate_optimizer(model)
-    criterion_CE = nn.CrossEntropyLoss().cuda()
-    train_loader, test_loader = load_dataset()
+    # display_cfgs(model)
+    test_loader = load_dataset()
     print('preparing done')
     # --------------------------------
     # prepare tools
-    train_acc_counter = Attention_AR_counter('train accuracy: ', cfgs.dataset_cfgs['dict_dir'],
-                                             cfgs.dataset_cfgs['case_sensitive'])
     test_acc_counter = Attention_AR_counter('\ntest accuracy: ', cfgs.dataset_cfgs['dict_dir'],
                                             cfgs.dataset_cfgs['case_sensitive'])
-    loss_counter = Loss_counter(cfgs.global_cfgs['show_interval'])
     encdec = cha_encdec(cfgs.dataset_cfgs['dict_dir'], cfgs.dataset_cfgs['case_sensitive'])
     # ---------------------------------
     if cfgs.global_cfgs['state'] == 'Test':
@@ -185,54 +177,6 @@ if __name__ == '__main__':
         )
         for prdt_text, prdt_prob in zip(total_prdt_texts, total_prdt_prob):
             print(prdt_text, '\t', prdt_prob)
-        exit()
+    else:
+        raise ValueError
     # --------------------------------
-    total_iters = len(train_loader)
-    for nEpoch in range(0, cfgs.global_cfgs['epoch']):
-        for batch_idx, sample_batched in enumerate(train_loader):
-            # data prepare
-            data = sample_batched['image']
-            label = sample_batched['label']
-            target = encdec.encode(label)
-            Train_or_Eval(model, 'Train')
-            data = data.cuda()
-            label_flatten, length = flatten_label(target)
-            target, label_flatten = target.cuda(), label_flatten.cuda()
-            # net forward
-            features = model[0](data)  # 32*64*16, 128*32*8, 512*32*8
-            A = model[1](features)  # 35*32*8
-            output, attention_maps = model[2](features[-1], A, target, length)
-            # computing accuracy and loss
-            train_acc_counter.add_iter(output, length.long(), length, label)
-            loss = criterion_CE(output, label_flatten)
-            loss_counter.add_iter(loss)
-            # update network
-            Zero_Grad(model)
-            loss.backward()
-            nn.utils.clip_grad_norm_(model[0].parameters(), 20, 2)
-            nn.utils.clip_grad_norm_(model[1].parameters(), 20, 2)
-            nn.utils.clip_grad_norm_(model[2].parameters(), 20, 2)
-            Updata_Parameters(optimizers, frozen=[])
-            # visualization and saving
-            if batch_idx % cfgs.global_cfgs['show_interval'] == 0 and batch_idx != 0:
-                print(datetime.datetime.now().strftime('%H:%M:%S'))
-                print('Epoch: {}, Iter: {}/{}, Loss dan: {}'.format(
-                    nEpoch,
-                    batch_idx,
-                    total_iters,
-                    loss_counter.get_loss()))
-                train_acc_counter.show()
-            if batch_idx % cfgs.global_cfgs['test_interval'] == 0 and batch_idx != 0:
-                test((test_loader),
-                     model,
-                     [encdec,
-                      flatten_label,
-                      test_acc_counter])
-            if nEpoch % cfgs.saving_cfgs['saving_epoch_interval'] == 0 and \
-                    batch_idx % cfgs.saving_cfgs['saving_iter_interval'] == 0 and \
-                    batch_idx != 0:
-                for i in range(0, len(model)):
-                    torch.save(model[i].state_dict(),
-                               os.path.join(cfgs.saving_cfgs['saving_path'], 'E{}_I{}-{}_M{}.pth'.format(
-                                   nEpoch, batch_idx, total_iters, i)))
-        Updata_Parameters(optimizer_schedulers, frozen=[])
