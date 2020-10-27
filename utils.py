@@ -90,6 +90,7 @@ class Attention_AR_counter():
             self.total_C += len(labels[i])
             self.total_W += len(l_words)
             self.correct = self.correct + 1 if labels[i] == prdt_texts[i] else self.correct
+        return prdt_texts, prdt_prob
 
     def show(self):
         # Accuracy for scene text.

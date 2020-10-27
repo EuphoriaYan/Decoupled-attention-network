@@ -10,7 +10,7 @@ from torch.utils.data import Dataset, DataLoader
 import datetime
 # ------------------------
 from utils import *
-import cfgs_scene as cfgs
+import cfgs_scene_test as cfgs
 
 
 # import cfgs_hw as cfgs
