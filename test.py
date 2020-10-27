@@ -52,16 +52,6 @@ def Train_or_Eval(models, state='Train'):
             model.eval()
 
 
-def Zero_Grad(models):
-    for model in models:
-        model.zero_grad()
-
-
-def Updata_Parameters(optimizers, frozen):
-    for i in range(0, len(optimizers)):
-        if i not in frozen:
-            optimizers[i].step()
-
 
 # ---------------------dataset
 def load_dataset():
@@ -170,13 +160,14 @@ if __name__ == '__main__':
     encdec = cha_encdec(cfgs.dataset_cfgs['dict_dir'], cfgs.dataset_cfgs['case_sensitive'])
     # ---------------------------------
     if cfgs.global_cfgs['state'] == 'Test':
-        total_prdt_texts, total_prdt_prob = infer(
-            (test_loader),
-            model,
-            [encdec, flatten_label, test_acc_counter]
-        )
-        for prdt_text, prdt_prob in zip(total_prdt_texts, total_prdt_prob):
-            print(prdt_text, '\t', prdt_prob)
+        with torch.no_grad():
+            total_prdt_texts, total_prdt_prob = infer(
+                (test_loader),
+                model,
+                [encdec, flatten_label, test_acc_counter]
+            )
+            for prdt_text, prdt_prob in zip(total_prdt_texts, total_prdt_prob):
+                print(prdt_text, '\t', prdt_prob)
     else:
         raise ValueError
     # --------------------------------
