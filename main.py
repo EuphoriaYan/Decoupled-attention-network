@@ -178,13 +178,7 @@ if __name__ == '__main__':
     encdec = cha_encdec(cfgs.dataset_cfgs['dict_dir'], cfgs.dataset_cfgs['case_sensitive'])
     # ---------------------------------
     if cfgs.global_cfgs['state'] == 'Test':
-        total_prdt_texts, total_prdt_prob = infer(
-            (test_loader),
-            model,
-            [encdec, flatten_label, test_acc_counter]
-        )
-        for prdt_text, prdt_prob in zip(total_prdt_texts, total_prdt_prob):
-            print(prdt_text, '\t', prdt_prob)
+        test((test_loader), model, [encdec, flatten_label, test_acc_counter])
         exit()
     # --------------------------------
     total_iters = len(train_loader)

@@ -138,7 +138,7 @@ def infer(test_loader, model, tools):
         output, out_length = model[2](features[-1], A, target, length, True)
         prdt_texts, prdt_prob = tools[2].add_iter(output, out_length, length, label)
         total_prdt_texts.extend(prdt_texts)
-        total_prdt_prob.extend(prdt_prob)
+        total_prdt_prob.extend(prdt_prob.item())
     # tools[2].show()
     Train_or_Eval(model, 'Train')
     return total_prdt_texts, total_prdt_prob
